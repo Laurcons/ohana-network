@@ -53,7 +53,7 @@ class ActivationController extends AbstractController
 
             $doctrine->getManager()->flush();
 
-            $this->addFlash("notice", "You need to log in again using your new username and password.");
+            $this->addFlash("notice", "You might need to log in again using your new username and password.");
 
             return $this->redirectToRoute('home'); // will be redirected to login anyway
         }
