@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Birthdays{% endblock %}
+
+{% block body %}
+<div class="bg-dark p-3 mb-3 rounded">
+    <h1>Birthdays</h1>
+    <p>View details about your groupmates' birthdays here.</p>
+</div>
+
+{% for user in todays_birthdays %}
+<div class="alert alert-info">
+    It's {{ user.nickname }}'s birthday today! 🎉🎉 Don't forget to wish {{ user.pronounDative }} a Happy Birthday!
+</div>
+{% endfor %}
+
+<h2>All birthdays</h2>
+Sorted in chronological order
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Birthday</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in sorted_birthdays %}
+        <tr>
+            <td>
+                {{ user.nickname }}
+                {% if (user.birthdate | date('m-d')) == (date() | date('m-d')) %}
+                    🎉
+                {% endif %}
+            </td>
+            <td>{{ user.birthdate | date('Y-m-d') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Upcoming birthdays</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Birthday</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bday in normalized_birthdays %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+                {{ bday.user.nickname }}
+                {% if (bday.user.birthdate | date('m-d')) == (date() | date('m-d')) %}
+                    🎉
+                {% endif %}
+            </td>
+            <td>{{ bday.normalized | date('l, F j (Y)') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
