@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Account activation{% endblock %}
+
+{% block body %}
+<div class="p-3 mb-3 bg-dark rounded">
+    <h1>Account activation</h1>
+    Hello there! Your account is not activated. Please complete this form to finish registration.
+</div>
+
+{{ form(form) }}
+
+{# {{ form_start(form) }}
+    <input type="hidden" name="csrf" value="{{ csrf_token('activation') }}" />
+    <div class="mb-3">
+        <label>Username:</label>
+        <input
+            class="form-control"
+            type="text"
+            name="username"
+            value="{{ app.user.username }}"
+        />
+        {% for message in app.flashes('error-username') %}
+            <div class="mt-2 text-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <small class="text-muted">You can change your current username if you don't like the default one. The username will only be used by you to log in.</small>
+    </div>
+    <div class="mb-3">
+        <label>Password:</label>
+        <input
+            class="form-control"
+            type="password"
+            name="password"
+        />
+        {% for message in app.flashes('error-password') %}
+            <div class="my-2 text-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <small class="text-muted">Please set a new password. If you forget it, it needs to be manually reset by an administrator.</small>
+    </div>
+    <div class="mb-3">
+        <label>Date of birth:</label>
+        <input
+            class="form-control"
+            type="date"
+            name="birthdate"
+            value="{{ app.user.birthdate | date('Y-m-d') }}"
+        />
+        {% for message in app.flashes('error-birthdate') %}
+            <div class="my-2 text-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        <label>Full name:</label>
+        <input
+            class="form-control"
+            type="text"
+            name="realName"
+            value="{{ app.user.realName }}"
+        />
+        {% for message in app.flashes('error-realName') %}
+            <div class="my-2 text-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <small class="text-muted">
+            Make sure you write your family name first, followed by your preferred given name, then any other given names (if you want). Do not add dashes.
+            Eg. Pricop Laurentiu Constantin
+        </small>
+    </div>
+    <div class="mb-3">
+        <label>Preferred nickname:</label>
+        <input
+            class="form-control"
+            type="text"
+            name="nickname"
+            value="{{ app.user.nickname }}"
+        />
+        {% for message in app.flashes('error-nickname') %}
+            <div class="my-2 text-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <small class="text-muted">
+            This will be used predominantly in the Network instead of your full name.
+        </small>
+    </div>
+    <div class="mb-3">
+        <label>Pronouns:</label>
+        <input
+            class="form-control"
+            type="text"
+            name="pronouns"
+            value="{{ app.user.pronouns }}"
+        />
+        {% for message in app.flashes('error-pronouns') %}
+            <div class="my-2 text-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <small class="text-muted">
+            Make sure you write them in the format <code>he/him/his</code>, where the first pronoun is in nominative form ("he is"), the second is in dative form ("i give him"),
+            and third is in genitive form ("this is his stuff").
+            These pronouns will be used across the Network when referring to you.
+        </small>
+    </div>
+    <div class="mb-3 p-3 bg-dark rounded">
+        <p>Welcome to the Ohana Network! A project by Bubu.</p>
+        <p class="text-danger">
+            {{ form_errors(form) }}
+        </p>
+        <button
+            type="submit"
+            class="btn btn-primary btn-lg">
+            Finish registration
+        </button>
+    </div>
+{{ form_end(form) }} #}
+
+{% endblock %}
