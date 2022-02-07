@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -77,6 +79,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $nickname;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LuluRanking::class, mappedBy="target", orphanRemoval=true)
+     */
+    private $luluRankings;
+
+    public function __construct()
+    {
+        $this->luluRankings = new ArrayCollection();
+    }
     public const STATUS_NOT_ACTIVATED = "NOT_ACTIVATED";
     public const STATUS_ACTIVE = "ACTIVE";
     public const STATUS_PASSWORD_RESET = "PASSWORD_RESET";
@@ -253,6 +265,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNickname(string $nickname): self
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LuluRanking[]
+     */
+    public function getLuluRankings(): Collection
+    {
+        return $this->luluRankings;
+    }
+
+    public function addLuluRanking(LuluRanking $luluRanking): self
+    {
+        if (!$this->luluRankings->contains($luluRanking)) {
+            $this->luluRankings[] = $luluRanking;
+            $luluRanking->setTarget($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLuluRanking(LuluRanking $luluRanking): self
+    {
+        if ($this->luluRankings->removeElement($luluRanking)) {
+            // set the owning side to null (unless already changed)
+            if ($luluRanking->getTarget() === $this) {
+                $luluRanking->setTarget(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lulu's Rankings{% endblock %}
+
+{% block body %}
+<div class="bg-dark p-3 mb-3 rounded">
+    <h1>Lulu's Rankings</h1>
+    {% if is_ranker %}
+        <p>Give points to your groupmates here. They can all see them in real time!</p>
+    {% else %}
+        <p>See the points that Lulu has given you here. &lt;3</p>
+    {% endif %}
+</div>
+
+{% if is_ranker %}
+    <form method="POST">
+    <input type="hidden" name="csrf" value="{{ csrf_token('luluRankings') }}" />
+{% endif %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for data in user_data %}
+                <tr>
+                    <td>{{ data.user.nickname }}</td>
+                    <td>
+                        {% if is_ranker %}
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="ranking_{{ data.user.uuid }}"
+                                value="{{ data.ranking.value ?? ''}}"
+                            />
+                        {% else %}
+                            {{ data.ranking.value ?? "--" }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+{% if is_ranker %}
+    <p>All your modifications are logged, and a point history is kept.</p>
+    <p>You're free to write anything you want in the text boxes. However, it's indicated you write numbers (or start with numbers) so that Bubu can try to process the data in the future (ie. make graphs or something).</p>
+    <button class="btn btn-primary" type="submit">Update points</button>
+    </form>
+{% endif %}
+
+{% endblock %}
