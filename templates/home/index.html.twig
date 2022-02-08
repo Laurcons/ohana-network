@@ -14,10 +14,28 @@
 
 <div class="bg-dark p-3 mb-3 rounded">
     <h1>Welcome to the Ohana Network!</h1>
-    <p>Welcome!</p>
+    <p>Hi!</p>
     <p>Any activity that requires coordinated group participation can take place here, as well as anything that brings us together!</p>
-    <p>Any ideas about what to do with this Network are welcome. Let's make this something great!</p>
-    <p>A project by Bubu &lt;3</p>
+    <p>Any ideas about what to do with this Network are welcome. Let's make this something interesting!</p>
+    <small>A project by Bubu &lt;3</small>
 </div>
-<p>News will appear here, i guess. I will probably announce them on the actual group first tho.</p>
+
+<h1>Useful links</h1>
+{% set links = [
+    [ "Discord Server", "https://discord.gg/aYyZPNjXCj" ],
+    [ "Rules Sheet", "https://drive.google.com/file/d/1blKlF1kXtsziuzyxyuTA2GKKd2UMAaUS/view?usp=drivesdk" ],
+    [ "Spotify Playlist", "https://open.spotify.com/playlist/7eijTs7ol49upFjOaxJks0?si=9c96b07ff6364f18" ],
+    [ "Introductions Form", "https://forms.gle/SoxFscQQKECBRm5k6" ],
+    [ "Introductions Form Results Spreadsheet", "https://docs.google.com/spreadsheets/d/1F3XBYkJTMc2vubB3eolONzYec9be6wZ9rI0X5c1TuyQ/edit?usp=sharing" ],
+    [ "Google Form with Group Chat (TikTok)", "https://forms.gle/sBMw3TQdg4sjQcgT6" ]
+]
+%}
+<div class="list-group">
+    {% for link in links %}
+        <a href="{{ link[1] }}" class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferer">
+            {{ link[0] }}
+        </a>
+    {% endfor %}
+</div>
+
 {% endblock %}
