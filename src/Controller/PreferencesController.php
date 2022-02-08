@@ -60,8 +60,9 @@ class PreferencesController extends AbstractController
         }
 
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
-            // change the user's password
-
+            $hash = $hasher->hashPassword($currentUser, $changePasswordDTO->getNewPassword());
+            $currentUser->setPassword($hash);
+            $doctrine->getManager()->flush();
         }
 
         return $this->renderForm('preferences/index.html.twig', [
