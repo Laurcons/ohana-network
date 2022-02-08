@@ -5,10 +5,13 @@
 {% block body %}
 <div class="bg-dark p-3 mb-3 rounded">
     <h1>Preferences</h1>
+    <p>Change your preferences here.</p>
 </div>
-<div class="alert alert-danger">
-    <p>Currently you cannot change your preferences from within the app.</p>
-    <p>You will need to ask Bubu (because only he has database access) to mark your account as not activated, and go through the activation process again.</p>
-    <p>Sorry, and thanks for your patience!</p>
-</div>
+
+<h1>Change preferences</h1>
+{{ form(preferences_form) }}
+
+<h1>Change password</h1>
+{{ form(change_password_form) }}
+
 {% endblock %}
