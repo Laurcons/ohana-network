@@ -22,9 +22,10 @@ security:
             lazy: true
             provider: database_provider
 
-            # form_login:
-            #     login_path: login
-            #     check_path: login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2628000 # 1 month in seconds
+                always_remember_me: true
 
             custom_authenticators:
                 - App\Security\UserAuthenticator
