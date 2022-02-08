@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tellonym{% endblock %}
+
+{% block body %}
+<div class="bg-dark p-3 mb-3 rounded">
+    <h1>Tellonym</h1>
+    <p>Tell any groupmate anything you want, it's anonymous!</p>
+    <small>No, I did not just steal the name from the original thing. A tiny yellow bird whispered it to me. I am not sure where she got it from, though.</small>
+</div>
+
+<h2>Your Tellonyms</h2>
+{% for tellonym in own_tellonyms %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <span class="badge bg-secondary ms-3 float-end">{{ tellonym.timestamp | date('Y-m-d') }}</span>
+            <small class="text-muted">An Ohana member said:</small>
+            <form action="{{ path('tellonym_hide', { id: tellonym.id }) }}" method="POST">
+                <button
+                    type="submit"
+                    class="btn btn-sm btn-outline-primary ms-3 float-end"
+                    onclick="return confirm('Removing this Tellonym will remove it from your wall. Proceed?')"
+                >
+                    Remove
+                </button>
+            </form>
+            <p>{{ tellonym.message }}</p>
+        </div>
+    </div>
+{% else %}
+    <p>No Tellonyms for you yet.</p>
+{% endfor %}
+
+<h2>Send a Tellonym!</h2>
+
+{{ form(form) }}
+
+{% endblock %}

@@ -85,9 +85,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $luluRankings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Tellonym::class, mappedBy="destination", orphanRemoval=true)
+     */
+    private $tellonyms;
+
     public function __construct()
     {
         $this->luluRankings = new ArrayCollection();
+        $this->tellonyms = new ArrayCollection();
     }
     public const STATUS_NOT_ACTIVATED = "NOT_ACTIVATED";
     public const STATUS_ACTIVE = "ACTIVE";
@@ -293,6 +299,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($luluRanking->getTarget() === $this) {
                 $luluRanking->setTarget(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tellonym[]
+     */
+    public function getTellonyms(): Collection
+    {
+        return $this->tellonyms;
+    }
+
+    public function addTellonym(Tellonym $tellonym): self
+    {
+        if (!$this->tellonyms->contains($tellonym)) {
+            $this->tellonyms[] = $tellonym;
+            $tellonym->setDestination($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTellonym(Tellonym $tellonym): self
+    {
+        if ($this->tellonyms->removeElement($tellonym)) {
+            // set the owning side to null (unless already changed)
+            if ($tellonym->getDestination() === $this) {
+                $tellonym->setDestination(null);
             }
         }
 
