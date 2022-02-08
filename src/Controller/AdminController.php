@@ -68,7 +68,7 @@ class AdminController extends AbstractController
             $user = $userRepo->findUuid($uuid);
             if (!$user)
                 return;
-            if (array_search('ROLE_ADMIN', $user->getRoles()) === false)
+            if (array_search('ROLE_ADMIN', $user->getRoles()) !== false)
                 return;
 
             $hash = $hasher->hashPassword($user, $newPassword);
@@ -96,7 +96,7 @@ class AdminController extends AbstractController
             $user = $userRepo->findUuid($uuid);
             if (!$user)
                 return;
-            if (array_search('ROLE_ADMIN', $user->getRoles()) === false)
+            if (array_search('ROLE_ADMIN', $user->getRoles()) !== false)
                 return;
             if (array_search('ROLE_ACTIVATED', $user->getRoles()) === false)
                 return;
