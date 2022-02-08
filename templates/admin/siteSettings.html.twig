@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<div class="p-3 bg-dark mb-3 rounded">
+    <h1>Site Settings</h1>
+    <p>Some site-wide settings are stored in this place. Do not modify them unless you know what you're doing.</p>
+</div>
+
+<form action="{{ path('admin_siteSettings_update') }}" method="POST">
+    {% for setting in all_settings %}
+    <div class="mb-3">
+        <label>{{ setting.name }}</label>
+        <input type="text" class="form-control" name="{{ setting.name }}" value="{{ setting.value }}" />
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">
+        Update settings
+    </button>
+</form>
+
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\DTO\AdminResetPasswordDTO;
 use App\Repository\UserRepository;
+use App\Repository\SiteSettingRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,5 +109,47 @@ class AdminController extends AbstractController
         })();
 
         return $this->redirectToRoute('admin_users');
+    }
+
+    /**
+     * @Route("/siteSettings", name="admin_siteSettings")
+     */
+    public function siteSettings(
+        SiteSettingRepository $siteSettingRepo
+    ): Response
+    {
+        $allSettings = $siteSettingRepo->findAll();
+
+        return $this->render("admin/siteSettings.html.twig", [
+            'breadcrumbs' => [
+                ["Administration", "admin"],
+                ["Site Settings"]
+            ],
+            'all_settings' => $allSettings
+        ]);
+    }
+
+    /**
+     * @Route("/siteSettings/update", name="admin_siteSettings_update", methods={"POST"})
+     */
+    public function updateSiteSettings(
+        Request $request,
+        SiteSettingRepository $siteSettingRepo,
+        ManagerRegistry $doctrine
+    ): Response {
+        (function () use ($request, $siteSettingRepo, $doctrine) {
+
+            $allSettings = $siteSettingRepo->findAll();
+
+            foreach ($allSettings as $setting) {
+                $newValue = $request->request->get($setting->getName());
+                $setting->setValue($newValue);
+            }
+
+            $doctrine->getManager()->flush();
+
+        })();
+
+        return $this->redirectToRoute('admin_siteSettings');
     }
 }

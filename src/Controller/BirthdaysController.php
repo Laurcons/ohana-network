@@ -18,6 +18,8 @@ class BirthdaysController extends AbstractController
     ): Response
     {
         $allUsers = $userRepo->findAll();
+        /** @var User */
+        $currentUser = $this->getUser();
         $today = new \DateTime();
 
         $sortedBirthdays = $allUsers; // make a copy
@@ -58,14 +60,16 @@ class BirthdaysController extends AbstractController
 
         // find today's birthdays
         $todaysBirthdays = // cursed PHP shit follows
-            array_map(
+            array_map( // get only t he user from the normalized pair things
                 function (array $pair) {
                     return $pair['user'];
                 },
-                array_filter(
+                array_filter( // filter today's bdays from all normalized bdays
                     $normalizedBirthdays,
-                    function (array $pair) use ($today) {
-                        return $pair['normalized']->getTimestamp() == $today->getTimestamp();
+                    function (array $pair) use ($today, $currentUser) {
+                        return 
+                            $pair['normalized']->getTimestamp() == $today->getTimestamp() &&
+                            $pair['user']->getUuid() !== $currentUser->getUuid();
                     }
                 )
             );

@@ -8,6 +8,15 @@
     <p>View details about your groupmates' birthdays here.</p>
 </div>
 
+{% if (date() | date('m-d')) == (app.user.birthdate | date('m-d')) %}
+    <div class="card bg-success mb-3">
+        <div class="card-body">
+            <h4 class="card-title">Happy Birthday!! 🎉🎉</h4>
+            The Ohana Network wishes you a happy birthday! We're all happy to have you. &lt;3
+        </div>
+    </div>
+{% endif %}
+
 {% for user in todays_birthdays %}
 <div class="alert alert-info">
     It's {{ user.nickname }}'s birthday today! 🎉🎉 Don't forget to wish {{ user.pronounDative }} a Happy Birthday!
@@ -32,7 +41,7 @@ Sorted in chronological order
                     🎉
                 {% endif %}
             </td>
-            <td>{{ user.birthdate | date('Y-m-d') }}</td>
+            <td>{{ user.birthdate | date('F jS, Y') }}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -57,7 +66,7 @@ Sorted in chronological order
                     🎉
                 {% endif %}
             </td>
-            <td>{{ bday.normalized | date('l, F j (Y)') }}</td>
+            <td>{{ bday.normalized | date('l, F jS (Y)') }}</td>
         </tr>
         {% endfor %}
     </tbody>

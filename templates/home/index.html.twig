@@ -3,6 +3,15 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
+{% if (date() | date('m-d')) == (app.user.birthdate | date('m-d')) %}
+    <div class="card bg-success mb-3">
+        <div class="card-body">
+            <h4 class="card-title">Happy Birthday!! 🎉🎉</h4>
+            The Ohana Network wishes you a happy birthday! We're all happy to have you. &lt;3
+        </div>
+    </div>
+{% endif %}
+
 <div class="bg-dark p-3 mb-3 rounded">
     <h1>Welcome to the Ohana Network!</h1>
     <p>Welcome!</p>
