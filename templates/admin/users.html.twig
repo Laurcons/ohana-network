@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users - Administration{% endblock %}
+
+{% block body %}
+<h1>All users</h1>
+
+{% for user in all_users %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="badge bg-primary float-end">
+            {{ user.status }}
+        </div>
+        <h4>{{ user.nickname }}</h4>
+        <p>
+            {% for role in user.roles %}
+                <badge class="badge bg-secondary {{ role != 'ROLE_ADMIN' ? '' : 'border border-danger' }}">{{ role }}</badge>
+            {% endfor %}
+        </p>
+        <p class="mb-0">
+            <b>UUID:</b> <span class="hover-show">
+                <span class="normal">{{ user.uuid[:5] }}...</span>
+                <span class="expanded">{{ user.uuid }}</span>
+            </span><br>
+            <b>Pronouns:</b> {{ user.pronouns }}<br>
+            <b>Full name:</b> {{ user.realName }}<br>
+            <b>Birthdate:</b> {{ user.birthdate | date('Y-m-d') }}
+        </p>
+    </div>
+    {% if 'ROLE_ADMIN' not in user.roles %}
+    <div class="list-group list-group-flush">
+        <a href="#resetPasswordCollapse-{{ user.uuid }}" data-bs-toggle="collapse" class="list-group-item list-group-item-action">
+            Reset password
+        </a>
+        <div class="collapse" id="resetPasswordCollapse-{{ user.uuid }}">
+            <div class="card-body border-bottom border-secondary">
+                <div class="text-small text-muted mb-3">
+                    Resetting the password will change the user's password to <code>ohana[TODAYS_DATE]</code> (eg. <code>ohana{{ date() | date('Ymd') }}</code>).
+                    Upon login with the new credentials, the user will be prompted to set a new password for themselves.
+                </div>
+                <form action="{{ path('admin_users_resetPassword') }}" method="POST">
+                    <input type="hidden" name="uuid" value="{{ user.uuid }}" />
+                    <input type="hidden" name="newPassword" value="{{ 'ohana' ~ (date() | date('Ymd')) }}" />
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        Reset {{ user.nickname }}'s password
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% if 'ROLE_ACTIVATED' in user.roles %}
+            <a href="#deactivateCollapse-{{ user.uuid }}" data-bs-toggle="collapse" class="list-group-item list-group-item-action">
+                Deactivate
+            </a>
+            <div class="collapse" id="deactivateCollapse-{{ user.uuid }}">
+                <div class="card-body border-bottom border-secondary">
+                    <div class="text-small text-muted mb-3">
+                        Deactivating {{ user.nickname }}'s account will prompt {{ user.pronounDative }} to go through the activation process again on {{ user.pronounDative }}
+                        next login,
+                        and will prevent {{ user.pronounDative }} from accessing the rest of the Network until the process is finished.<br>
+                        This will NOT reset {{ user.nickname }}'s password. <br>
+                        Try not to do this unless it's absolutely necesarry (or {{ user.nickname }} requested it, to change their preferences).<br>
+                    </div>
+                    <form action="{{ path('admin_users_deactivate') }}" method="POST">
+                        <input type="hidden" name="uuid" value="{{ user.uuid }}" />
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Deactivate {{ user.nickname }}'s account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+<h2>Statuses breakdown</h2>
+<table class="table">
+    <tbody>
+        <tr>
+            <td>
+                <span class="badge bg-primary">ACTIVE</span>
+            </td>
+            <td>
+                The account is activated and is working normally.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="badge bg-primary">PASSWORD_RESET</span>
+            </td>
+            <td>
+                An admin-initiated password reset is in progress. On next login, the user will be prompted to change their password.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="badge bg-primary">NOT_ACTIVATED</span>
+            </td>
+            <td>
+                The user is new and hasn't yet gone through the activation process.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .hover-show .expanded {
+        display: none;
+    }
+    .hover-show:hover .expanded {
+        display: unset;
+    }
+    .hover-show:hover .normal {
+        display: none;
+    }
+</style>
+{% endblock %}
