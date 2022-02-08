@@ -22,6 +22,7 @@
                 <span class="normal">{{ user.uuid[:5] }}...</span>
                 <span class="expanded">{{ user.uuid }}</span>
             </span><br>
+            <b>Username:</b> {{ user.username }}<br>
             <b>Pronouns:</b> {{ user.pronouns }}<br>
             <b>Full name:</b> {{ user.realName }}<br>
             <b>Birthdate:</b> {{ user.birthdate | date('Y-m-d') }}

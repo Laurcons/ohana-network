@@ -73,7 +73,8 @@ class AdminController extends AbstractController
 
             $hash = $hasher->hashPassword($user, $newPassword);
 
-            $user->setStatus(User::STATUS_PASSWORD_RESET);
+            if ($user->getStatus() === User::STATUS_ACTIVE)
+                $user->setStatus(User::STATUS_PASSWORD_RESET);
             $user->setPassword($hash);
             $doctrine->getManager()->flush();
         })();
