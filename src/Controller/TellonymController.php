@@ -32,7 +32,7 @@ class TellonymController extends AbstractController
     ): Response
     {
         $ownTellonyms = $tellonymRepo->findForUserOrderedUnhidden($this->getUser());
-        $allUsers = $userRepo->findAll();
+        $allUsers = $userRepo->findActive();
 
         $newTellonym = new Tellonym();
         $form = $this->createFormBuilder($newTellonym)

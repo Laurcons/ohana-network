@@ -17,7 +17,7 @@ class BirthdaysController extends AbstractController
         UserRepository $userRepo
     ): Response
     {
-        $allUsers = $userRepo->findAll();
+        $allUsers = $userRepo->findActive();
         /** @var User */
         $currentUser = $this->getUser();
         $today = new \DateTime();

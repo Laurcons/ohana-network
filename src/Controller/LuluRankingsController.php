@@ -32,7 +32,7 @@ class LuluRankingsController extends AbstractController
         $currentUser = $this->getUser();
         $isRanker = $currentUser->getUuid() === $rankerUuid;
 
-        $users = $userRepo->findAll();
+        $users = $userRepo->findActive();
 
         $userData = [];
         foreach ($users as $user) {
@@ -44,7 +44,9 @@ class LuluRankingsController extends AbstractController
             ];
         }
 
-        if ($isRanker && $request->isMethod("POST")) {
+        if ($request->isMethod("POST")) {
+            if (!$isRanker)
+                throw $this->createAccessDeniedException();
             // handle the form
             if (!$this->isCsrfTokenValid('luluRankings', $request->request->get('csrf')))
                 return new Response("Invalid CSRF.", 422);

@@ -45,6 +45,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getSingleResult();
     }
 
+    public function findActive(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.status = :active')
+            ->setParameter('active', User::STATUS_ACTIVE)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Member[] Returns an array of Member objects
     //  */
