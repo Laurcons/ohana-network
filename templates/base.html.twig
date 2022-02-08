@@ -32,17 +32,37 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         {% if is_granted('ROLE_ACTIVATED') %}
                             <li class="nav-item">
-                                <a href="{{ path('home') }}" class="nav-link">Home</a>
+                                <a href="{{ path('home') }}" class="nav-link">
+                                    <i class="bi-house-heart me-1"></i>
+                                    Home
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ path('preferences') }}" class="nav-link">Preferences</a>
+                                <a href="{{ path('preferences') }}" class="nav-link">
+                                    <i class="bi-sliders me-1"></i>
+                                    Preferences
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ path('birthdays') }}" class="nav-link">Birthdays</a>
+                                <a href="{{ path('birthdays') }}" class="nav-link">
+                                    <i class="bi-calendar-heart me-1"></i>
+                                    Birthdays
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ path('luluRankings') }}" class="nav-link">Lulu's Rankings</a>
+                                <a href="{{ path('luluRankings') }}" class="nav-link">
+                                    <i class="bi-card-list me-1"></i>
+                                    Lulu's Rankings
+                                </a>
                             </li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin') }}" class="nav-link">
+                                        <i class="bi-boxes me-1"></i>
+                                        Administration
+                                    </a>
+                                </li>
+                            {% endif %}
                         {% endif %}
                         {% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                             <li class="nav-item">
@@ -51,40 +71,33 @@
                         {% else %}
                             <li class="nav-item">
                                 <a href="/logout" class="nav-link">
-                                    <i class="bi-box-arrow-right me-2"></i>
+                                    <i class="bi-box-arrow-right me-1"></i>
                                     Logout, {{ app.user.nickname }}
                                 </a>
                             </li>
                         {% endif %}
                     </ul>
                 </div>
-                {# <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled">Disabled</a>
-                        </li>
-                    </ul>
-                </div> #}
             </div>
         </nav>
         <main class="container-fluid wide-adapt py-3">
+            {% if breadcrumbs is defined %}
+                <nav aria-label="breadcrumb">
+                    {% for bc in breadcrumbs %}
+                    <ol class="breadcrumb">
+                        {% if loop.last %}
+                            <li class="breadcrumb-item active">
+                                {{ bc[0] }}
+                            </li>
+                        {% else %}
+                            <li class="breadcrumb-item">
+                                <a href="{{ bc[1] }}">{{ bc[0] }}</a>
+                            </li>
+                        {% endif %}
+                    </ol>
+                    {% endfor %}
+                </nav>
+            {% endif %}
             {% for message in app.flashes('notice') %}
                 <div class="alert alert-info">
                     {{ message }}
