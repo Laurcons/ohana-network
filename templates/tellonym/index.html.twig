@@ -11,7 +11,7 @@
 
 <h2>Your Tellonyms</h2>
 {% for tellonym in own_tellonyms %}
-    <div class="card mb-3">
+    <div class="card mb-3 {{ tellonym.seen == 0 ? 'border-danger' : '' }}">
         <div class="card-body">
             <span class="badge bg-secondary ms-3 float-end">{{ tellonym.timestamp | date('Y-m-d') }}</span>
             <small class="text-muted">An Ohana member said:</small>

@@ -65,8 +65,14 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ path('tellonym') }}" class="nav-link">
-                                    <i class="bi-send me-1"></i>
+                                    {% set hasUnseen = 0 in (app.user.tellonyms | filter(t => t.hidden == 0) | map(t => t.seen)) %}
+                                    <i class="bi-send{{ hasUnseen ? '-exclamation' : '' }} me-1"></i>
                                     Tellonym
+                                    {% if hasUnseen %}
+                                        <span class="badge bg-primary ms-1">
+                                            NEW
+                                        </span>
+                                    {% endif %}
                                 </a>
                             </li>
                             {% if is_granted('ROLE_ADMIN') %}

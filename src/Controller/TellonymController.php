@@ -33,6 +33,7 @@ class TellonymController extends AbstractController
     {
         $ownTellonyms = $tellonymRepo->findForUserOrderedUnhidden($this->getUser());
         $allUsers = $userRepo->findActive();
+        $manager = $doctrine->getManager();
 
         $newTellonym = new Tellonym();
         $form = $this->createFormBuilder($newTellonym)
@@ -60,17 +61,24 @@ class TellonymController extends AbstractController
                 ->setHidden(false)
                 ->setSeen(false);
 
-            $manager = $doctrine->getManager();
             $manager->persist($newTellonym);
             $manager->flush();
 
             return $this->redirectToRoute('tellonym'); // redirect to the GET version
         }
 
-        return $this->renderForm('tellonym/index.html.twig', [
+        $response = $this->renderForm('tellonym/index.html.twig', [
             'own_tellonyms' => $ownTellonyms,
             'form' => $form
         ]);
+
+        // mark all self tellonyms as seen
+        foreach ($ownTellonyms as $tellonym) {
+            $tellonym->setSeen(true);
+        }
+        $manager->flush();
+
+        return $response;
     }
 
     /**
