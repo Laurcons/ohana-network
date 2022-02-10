@@ -66,6 +66,7 @@ class AdminController extends AbstractController
             $newPassword = $request->request->get('newPassword');
 
             $user = $userRepo->findUuid($uuid);
+            // adding flashes here is not necessary since the UI prevents these cases
             if (!$user)
                 return;
             if (array_search('ROLE_ADMIN', $user->getRoles()) !== false)
@@ -77,6 +78,8 @@ class AdminController extends AbstractController
                 $user->setStatus(User::STATUS_PASSWORD_RESET);
             $user->setPassword($hash);
             $doctrine->getManager()->flush();
+
+            $this->addFlash('notice', "Password of ". $user->getNickname() ." reset successfully!");
         })();
 
         return $this->redirectToRoute('admin_users');
@@ -95,6 +98,7 @@ class AdminController extends AbstractController
             $uuid = $request->request->get('uuid');
 
             $user = $userRepo->findUuid($uuid);
+            // adding flashes here is not necessary since the UI prevents these cases
             if (!$user)
                 return;
             if (array_search('ROLE_ADMIN', $user->getRoles()) !== false)
@@ -107,6 +111,8 @@ class AdminController extends AbstractController
             $roles = array_filter($roles, function ($role) { return $role !== "ROLE_ACTIVATED"; });
             $user->setRoles($roles);
             $doctrine->getManager()->flush();
+
+            $this->addFlash('notice', "Account of ". $user->getNickname() ." deactivated successfully!");
         })();
 
         return $this->redirectToRoute('admin_users');
@@ -148,6 +154,8 @@ class AdminController extends AbstractController
             }
 
             $doctrine->getManager()->flush();
+
+            $this->addFlash('notice', "Site settings updated successfully!");
 
         })();
 

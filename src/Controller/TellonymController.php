@@ -64,6 +64,8 @@ class TellonymController extends AbstractController
             $manager->persist($newTellonym);
             $manager->flush();
 
+            $this->addFlash('notice', "You sent a Tellonym successfully!");
+
             return $this->redirectToRoute('tellonym'); // redirect to the GET version
         }
 

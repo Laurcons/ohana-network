@@ -56,12 +56,14 @@ class PreferencesController extends AbstractController
 
         if ($preferencesForm->isSubmitted() && $preferencesForm->isValid()) {
             $doctrine->getManager()->flush();
+            $this->addFlash('notice', "Preferences updated successfully.");
             return $this->redirectToRoute($request->get('_route'));
         }
 
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
             $hash = $hasher->hashPassword($currentUser, $changePasswordDTO->getNewPassword());
             $currentUser->setPassword($hash);
+            $this->addFlash('notice', "Password updated successfully.");
             $doctrine->getManager()->flush();
         }
 
