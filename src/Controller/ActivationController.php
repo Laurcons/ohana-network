@@ -26,12 +26,6 @@ class ActivationController extends AbstractController
         if ($user->getStatus() !== User::STATUS_NOT_ACTIVATED) {
             return $this->redirectToRoute("home");
         }
-        
-        $userId = $user->getId();
-
-        $userRepo = $doctrine->getRepository(User::class);
-        /** @var User */
-        $user = $userRepo->find($userId);
 
         $form = $this->createForm(ActivationFormType::class, $user);
 

@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -31,7 +32,12 @@ class ResetPasswordController extends AbstractController
         $dto = new ResetPasswordDTO();
 
         $form = $this->createFormBuilder($dto)
-            ->add("password", PasswordType::class)
+            ->add("password", RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => "Your passwords must match.",
+                'first_options' => [ 'label' => "Password" ],
+                'second_options' => [ 'label' => "Password confirm" ],
+            ])
             ->add("submit", SubmitType::class, ["label" => "Reset password"])
             ->getForm();
 
