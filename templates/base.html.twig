@@ -67,36 +67,52 @@
                                     Planned features
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ path('birthdays') }}" class="nav-link">
-                                    <i class="bi-calendar-heart me-1"></i>
-                                    Birthdays
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi-balloon-heart me-1"></i>
+                                    Activities
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ path('luluRankings') }}" class="nav-link">
-                                    <i class="bi-card-list me-1"></i>
-                                    Lulu's Rankings
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ path('tellonym') }}" class="nav-link">
-                                    {% set hasUnseen = 0 in (app.user.tellonyms | filter(t => t.hidden == 0) | map(t => t.seen)) %}
-                                    <i class="bi-send{{ hasUnseen ? '-exclamation' : '' }} me-1"></i>
-                                    Tellonym
-                                    {% if hasUnseen %}
-                                        <span class="badge bg-primary ms-1">
-                                            NEW
-                                        </span>
-                                    {% endif %}
-                                </a>
+                                <div class="dropdown-menu">
+                                    <a href="{{ path('birthdays') }}" class="dropdown-item">
+                                        <i class="bi-calendar-heart me-1"></i>
+                                        Birthdays
+                                    </a>
+                                    <a href="{{ path('luluRankings') }}" class="dropdown-item">
+                                        <i class="bi-card-list me-1"></i>
+                                        Lulu's Rankings
+                                    </a>
+                                    <a href="{{ path('tellonym') }}" class="dropdown-item">
+                                        {% set hasUnseen = 0 in (app.user.tellonyms | filter(t => t.hidden == 0) | map(t => t.seen)) %}
+                                        <i class="bi-send{{ hasUnseen ? '-exclamation' : '' }} me-1"></i>
+                                        Tellonym
+                                        {% if hasUnseen %}
+                                            <span class="badge bg-primary ms-1">
+                                                NEW
+                                            </span>
+                                        {% endif %}
+                                    </a>
+                                </div>
                             </li>
                             {% if is_granted('ROLE_ADMIN') %}
-                                <li class="nav-item">
-                                    <a href="{{ path('admin') }}" class="nav-link">
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="bi-boxes me-1"></i>
                                         Administration
                                     </a>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ path('admin') }}" class="dropdown-item">
+                                            <i class="bi-boxes me-1"></i>
+                                            Administration
+                                        </a>
+                                        <a href="{{ path('admin_users') }}" class="dropdown-item">
+                                            <i class="bi-people me-1"></i>
+                                            Users
+                                        </a>
+                                        <a href="{{ path('admin_siteSettings') }}" class="dropdown-item">
+                                            <i class="bi-gear me-1"></i>
+                                            Site Settings
+                                        </a>
+                                    </div>
                                 </li>
                             {% endif %}
                         {% endif %}
