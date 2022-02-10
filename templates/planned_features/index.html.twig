@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planned features{% endblock %}
+
+{% block body %}
+<div class="bg-dark p-3 mb-3 rounded">
+    <h1>Planned features</h1>
+    <p>A list of stuff that Bubu is planning to add to the Network, and the percentage of progress.</p>
+</div>
+{% set features = [
+    {
+        'name': 'Drawing Prompts Wheel',
+        'ideaBy': 'Mike',
+        'progress': 0
+    },
+    {
+        'name': 'Polls',
+        'progress': 5
+    },
+    {
+        'name': 'In-site Notifications',
+        'progress': 0
+    },
+    {
+        'name': 'Email Notifications',
+        'progress': 0
+    },
+] | sort((a,b) => b.progress <=> a.progress ) %}
+
+{% for feature in features %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h4 class="card-title">{{ feature.name }}</h4>
+        <div class="mb-3">
+            {% if feature.ideaBy is defined %}
+                Idea by <b>{{ feature.ideaBy }}</b><br>
+            {% endif %}
+        </div>
+        {% if feature.progress != 0 %}
+            <div class="d-flex">
+                <div class="progress w-100 mb-0">
+                    <div
+                        class="progress-bar"
+                        role="progressbar"
+                        style="width: {{ feature.progress }}%;"
+                        aria-valuenow="{{ feature.progress}}" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+                <div class="badge">
+                    {{ feature.progress }}%
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
