@@ -20,6 +20,21 @@
     <small>A project by Bubu &lt;3</small>
 </div>
 
+<h1>Activities</h1>
+{% set links = [
+    [ "Birthdays", "birthdays" ],
+    [ "Lulu's Rankings", "luluRankings" ],
+    [ "Tellonym", "tellonym" ],
+]
+%}
+<div class="list-group mb-3">
+    {% for link in links %}
+        <a href="{{ path(link[1]) }}" class="list-group-item list-group-item-action">
+            {{ link[0] }}
+        </a>
+    {% endfor %}
+</div>
+
 <h1>Useful links</h1>
 {% set links = [
     [ "Discord Server", "https://discord.gg/aYyZPNjXCj" ],
@@ -31,7 +46,7 @@
     [ "Google Form with Group Chat (TikTok)", "https://forms.gle/sBMw3TQdg4sjQcgT6" ]
 ]
 %}
-<div class="list-group">
+<div class="list-group mb-3">
     {% for link in links %}
         <a href="{{ link[1] }}" class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferer">
             {{ link[0] }}
