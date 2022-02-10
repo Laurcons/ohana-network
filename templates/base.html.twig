@@ -56,12 +56,6 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ path('preferences') }}" class="nav-link">
-                                    <i class="bi-sliders me-1"></i>
-                                    Preferences
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="{{ path('plannedFeatures') }}" class="nav-link">
                                     <i class="bi-binoculars me-1"></i>
                                     Planned features
@@ -102,7 +96,7 @@
                                     <div class="dropdown-menu">
                                         <a href="{{ path('admin') }}" class="dropdown-item">
                                             <i class="bi-boxes me-1"></i>
-                                            Administration
+                                            Home
                                         </a>
                                         <a href="{{ path('admin_users') }}" class="dropdown-item">
                                             <i class="bi-people me-1"></i>
@@ -115,6 +109,12 @@
                                     </div>
                                 </li>
                             {% endif %}
+                            <li class="nav-item">
+                                <a href="{{ path('preferences') }}" class="nav-link">
+                                    <i class="bi-sliders me-1"></i>
+                                    Preferences
+                                </a>
+                            </li>
                         {% endif %}
                         {% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                             <li class="nav-item">
