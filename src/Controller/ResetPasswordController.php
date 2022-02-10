@@ -35,8 +35,8 @@ class ResetPasswordController extends AbstractController
             ->add("password", RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => "Your passwords must match.",
-                'first_options' => [ 'label' => "Password" ],
-                'second_options' => [ 'label' => "Password confirm" ],
+                'first_options' => [ 'label' => "New password" ],
+                'second_options' => [ 'label' => "New password confirm" ],
             ])
             ->add("submit", SubmitType::class, ["label" => "Reset password"])
             ->getForm();

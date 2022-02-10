@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -49,8 +50,12 @@ class PreferencesController extends AbstractController
         });
         $changePasswordForm = $formFactory->createNamed('chgPwd', FormType::class, $changePasswordDTO)
             ->add("currentPassword", PasswordType::class)
-            ->add("newPassword", PasswordType::class)
-            ->add("newPasswordConfirm", PasswordType::class)
+            ->add("newPassword", RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => "The passwords should match!",
+                'first_options' => [ 'label' => "New password" ],
+                'second_options' => [ 'label' => "New password confirm" ],
+            ])
             ->add("submit", SubmitType::class, ['label' => "Change password"]);
         $changePasswordForm->handleRequest($request);
 
