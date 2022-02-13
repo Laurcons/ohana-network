@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}News{% endblock %}
+
+{% block body %}
+<div class="bg-dark mb-3 p-3 rounded">
+    <h1>All news</h1>
+</div>
+
+{% for article in all_articles %}
+    {% include('news/_article_card.html.twig') %}
+{% endfor %}
+
+{% endblock %}

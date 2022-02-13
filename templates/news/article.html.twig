@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }} - News{% endblock %}
+
+{% block body %}
+<div class="bg-dark mb-3 p-3 rounded clearfix">
+    <h1>{{ article.title }}</h1>
+    <div class="float-end ms-2 d-flex flex-column justify-content-end">
+        <div class="mb-1">
+            <div class="badge bg-secondary float-end">{{ article.published | date('Y-m-d') }}</div>
+        </div>
+        <div>
+            <div class="badge bg-secondary float-end">by {{ article.author.nickname }}</div>
+        </div>
+    </div>
+</div>
+
+{{ article.contentMd | markdown_to_html }}
+
+{% endblock %}

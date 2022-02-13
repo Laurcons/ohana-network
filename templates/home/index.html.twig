@@ -35,6 +35,10 @@
     {% endfor %}
 </div>
 
+<h1>Latest article</h1>
+{% set article = latest_news_article %}
+{% include('news/_article_card.html.twig') %}
+
 <h1>Useful links</h1>
 {% set links = [
     [ "Discord Server", "https://discord.gg/aYyZPNjXCj" ],
