@@ -27,6 +27,16 @@
                 gtag('js', new Date());
                 gtag('config', '{{ google_analytics_id }}');
             </script>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <script>
+                    gtag('config', '{{ google_analytics_id }}', { 
+                        'user_id': '{{ app.user.uuid }}' 
+                    });
+                    gtag('set', 'user_properties', { 
+                        'ohana_member_uuid' : '{{ app.user.uuid }}' 
+                    });
+                </script>
+            {% endif %}
         {% endif %}
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}
