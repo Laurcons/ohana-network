@@ -19,6 +19,25 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
+    public function findLatestUnhidden()
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.hidden = 0')
+            ->orderBy('a.published', 'desc')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findAllUnhidden()
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.hidden = 0')
+            ->orderBy('a.published', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Article[] Returns an array of Article objects
     //  */

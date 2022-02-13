@@ -124,4 +124,31 @@ class Article
 
         return $this;
     }
+
+    /**
+     * Adds a user id to the seen by array. Removes duplicates. Returns self.
+     */
+    public function addSeenBy(int $id): self
+    {
+        $this->seenBy[] = $id;
+        array_unique($this->seenBy);
+        return $this;
+    }
+
+    /**
+     * Returns the part of contentMd until the ENDDESC mark, or the first 250 characters if the mark is not present.
+     * The ENDDESC mark is '[//]: # (enddesc)' without quotes.
+     */
+    public function getDescription(): string
+    {
+        $content = $this->getContentMd();
+        $end = strpos($content, "[//]: # (enddesc)");
+        if ($end === false) {
+            $substr = substr($content, 0, 250);
+            if (strlen($substr) !== strlen($content))
+                return $substr . "...";
+            return $substr;
+        }
+        return substr($content, 0, $end);
+    }
 }

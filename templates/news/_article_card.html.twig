@@ -1,0 +1,17 @@
+{# params: Article article, app global #}
+
+<div class="card mb-3">
+    <div class="card-body {{ app.user.id in article.seenBy ? '' : 'border border-danger rounded' }}">
+        <div class="float-end ms-2 d-flex flex-column justify-content-end">
+            <div class="mb-1">
+                <div class="badge bg-secondary float-end">{{ article.published | date('Y-m-d') }}</div>
+            </div>
+            <div>
+                <div class="badge bg-secondary float-end">by {{ article.author.nickname }}</div>
+            </div>
+        </div>
+        <h4 class="card-title">{{ article.title }}</h4>
+        {{ article.description | trim | markdown_to_html }}
+        <a class="btn btn-primary stretched-link" href="{{ path('news_article', { id: article.id }) }}">Read more</a>
+    </div>
+</div>
