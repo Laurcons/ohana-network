@@ -90,10 +90,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $tellonyms;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Poll::class, mappedBy="author", orphanRemoval=true)
+     */
+    private $authoredPolls;
+
     public function __construct()
     {
         $this->luluRankings = new ArrayCollection();
         $this->tellonyms = new ArrayCollection();
+        $this->authoredPolls = new ArrayCollection();
     }
     public const STATUS_NOT_ACTIVATED = "NOT_ACTIVATED";
     public const STATUS_ACTIVE = "ACTIVE";
@@ -329,6 +335,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($tellonym->getDestination() === $this) {
                 $tellonym->setDestination(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Poll[]
+     */
+    public function getAuthoredPolls(): Collection
+    {
+        return $this->authoredPolls;
+    }
+
+    public function addAuthoredPoll(Poll $authoredPoll): self
+    {
+        if (!$this->authoredPolls->contains($authoredPoll)) {
+            $this->authoredPolls[] = $authoredPoll;
+            $authoredPoll->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthoredPoll(Poll $authoredPoll): self
+    {
+        if ($this->authoredPolls->removeElement($authoredPoll)) {
+            // set the owning side to null (unless already changed)
+            if ($authoredPoll->getAuthor() === $this) {
+                $authoredPoll->setAuthor(null);
             }
         }
 

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Polls{% endblock %}
+
+{% block body %}
+<div class="mb-3 p-3 rounded bg-dark">
+    <h1>Polls</h1>
+    <p>Welcome to the poll area! You can answer polls here, and create any kind of poll you want.</p>
+</div>
+<div class="mb-3 clearfix">
+    <a href="{{ path('polls_new') }}" class="btn btn-primary float-end">
+        Create poll
+    </a>
+</div>
+{% for poll in polls %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h4>{{ poll.title }}</h4>
+    </div>
+    <div class="card-footer">
+        <span class="text-muted">by {{ poll.author.nickname }}</span>
+        <a href="#" class="btn btn-sm btn-primary float-end">
+            Vote
+        </a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
