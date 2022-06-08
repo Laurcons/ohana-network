@@ -18,8 +18,12 @@
         <h4>{{ poll.title }}</h4>
     </div>
     <div class="card-footer">
-        <span class="text-muted">by {{ poll.author.nickname }}</span>
-        <a href="#" class="btn btn-sm btn-primary float-end">
+        {% if app.user == poll.author %}
+            <a class="btn btn-sm text-light btn-outline-primary" href="{{ path('polls_edit', {id: poll.id}) }}">Edit</a>
+        {% else %}
+            <span class="text-muted">by {{ poll.author.nickname }}</span>
+        {% endif %}
+        <a href="#" class="btn btn-primary float-end">
             Vote
         </a>
     </div>

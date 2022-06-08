@@ -51,12 +51,92 @@ class PollsController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            $this->addFlash("notice", "pushed data " . json_encode($formData));
+            // TODO: Urgent JSON validation is needed here!
+            $data = json_decode($formData["dataJson"], true);
+            $poll = new Poll();
+            $poll
+                ->setTitle($data["title"])
+                ->setDescription($data["description"])
+                ->setAnswers($data["answers"])
+                ->setAuthor($this->getUser())
+                ->setOptions([
+                    "answersType" => $data["answersType"]
+                ]);
+            $manager = $doctrine->getManager();
+            $manager->persist($poll);
+            $manager->flush();
+            $this->addFlash("notice", "Poll successfully created.");
             return $this->redirectToRoute('polls');
         }
 
         return $this->renderForm('polls/new.html.twig', [
             'form' => $form
+        ]);
+    }
+
+    /**
+    * @Route("/{id}/edit", name="polls_edit")
+    */
+    public function edit(
+        int $id,
+        Request $request,
+        ManagerRegistry $doctrine,
+        PollRepository $pollRepo
+    ) {
+        $poll = $pollRepo->find($id);
+        if ($poll === null) 
+            throw $this->createNotFoundException("Poll not found.");
+        if ($poll->getAuthor() !== $this->getUser())
+            throw $this->createAccessDeniedException("You can only edit your own polls.");
+        $formData = [
+            "dataJson" => json_encode([
+                "title" => $poll->getTitle(),
+                "description" => $poll->getDescription(),
+                "answersType" => $poll->getOptions()["answersType"],
+                "answers" => $poll->getAnswers()
+            ])
+        ];
+        $form = $this->createFormBuilder($formData)
+            ->add('dataJson', HiddenType::class)
+            ->add('submit', SubmitType::class, ['label' => "Edit poll"])
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+            // TODO: Urgent JSON validation is needed here!
+            $data = json_decode($formData["dataJson"], true);
+            $poll
+                ->setTitle($data["title"])
+                ->setDescription($data["description"])
+                ->setAnswers($data["answers"])
+                ->setOptions([
+                    "answersType" => $data["answersType"]
+                ]);
+            $manager = $doctrine->getManager();
+            $manager->flush();
+            $this->addFlash("notice", "Poll successfully updated.");
+            return $this->redirectToRoute('polls_vote', [ "id" => $id ]);
+        }
+        
+        return $this->renderForm('polls/edit.html.twig', [
+            "form" => $form,
+            "poll" => $poll
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="polls_vote")
+     */
+    public function vote(
+        int $id,
+        Request $request,
+        PollRepository $pollRepo
+    ) {
+        $poll = $pollRepo->find($id);
+        if ($poll === null)
+            throw $this->createNotFoundException("Poll not found.");
+        return $this->render('polls/vote.html.twig', [
+            "poll" => $poll
         ]);
     }
 }

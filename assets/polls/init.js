@@ -7,9 +7,9 @@ function main() {
     let domelem = document.querySelector(".js-poll-control");
     if (domelem === null)
         return;
-    //let token = domelem.getAttribute("data-token");
+    let editMode = domelem.getAttribute("data-edit-mode") == "true";
     let root = createRoot(domelem);
-    root.render(<PollFormControl maxAnswers={50} />);
+    root.render(<PollFormControl maxAnswers={50} editMode={editMode} />);
 }
 
 main();

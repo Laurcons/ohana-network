@@ -36,7 +36,10 @@ function PollFormControl(props) {
       return true;
     }
     
-    useEffect(() => updateDataJson((t) => t), []);
+    useEffect(() => {
+      if (props.editMode)
+        setDataTree(JSON.parse(dataElem.value));
+    }, []);
 
     return (
       <>
@@ -79,14 +82,16 @@ function PollFormControl(props) {
             id="single-select-radio"
             type="radio"
             checked={dataTree.answersType == AT_SINGLE_SELECT}
-            onClick={() =>
+            onChange={() =>
               updateDataJson(t => {
                 t.answersType = AT_SINGLE_SELECT;
                 return t;
               })
             }
           />
-          <label className="form-check-label" for="single-select-radio">Only one answer per person (single select)</label>
+          <label className="form-check-label" htmlFor="single-select-radio">
+            Only one answer per person (single select)
+          </label>
         </div>
         <div className="form-check">
           <input
@@ -94,14 +99,16 @@ function PollFormControl(props) {
             type="radio"
             id="multi-select-radio"
             checked={dataTree.answersType == AT_MULTI_SELECT}
-            onClick={() =>
+            onChange={() =>
               updateDataJson(t => {
                 t.answersType = AT_MULTI_SELECT;
                 return t;
               })
             }
           />
-          <label className="form-check-label" for="multi-select-radio">Multiple answers per person (multi select)</label>
+          <label className="form-check-label" htmlFor="multi-select-radio">
+            Multiple answers per person (multi select)
+          </label>
         </div>
         <button
           type="button"
@@ -154,7 +161,7 @@ function PollFormControl(props) {
             className="btn btn-primary"
             onClick={ev => handleSubmit() || ev.preventDefault()}
           >
-            Create poll
+            { props.editMode ? "Edit poll" : "Create poll" }
           </button>
         </div>
       </>

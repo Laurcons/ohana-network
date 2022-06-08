@@ -1,21 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Create poll - Polls{% endblock %}
+{% block title %}Edit poll - Polls{% endblock %}
 
 {% block body %}
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
-    <li class="breadcrumb-item active">Create new poll</li>
+    <li class="breadcrumb-item">{{ poll.title }}</li>
+    <li class="breadcrumb-item active">Edit</li>
 </ul>
 <div class="mb-3 p-3 rounded bg-dark">
-    <h1>Create poll</h1>
+    <h1>Edit poll</h1>
 </div>
 
 {{ form_start(form) }}
     {{ form_row(form._token) }}
     {{ form_row(form.dataJson) }}
     
-    <div class="js-poll-control">
+    <div class="js-poll-control" data-edit-mode="true">
         <div class="spinner-border mb-3"></div>
     </div>
 

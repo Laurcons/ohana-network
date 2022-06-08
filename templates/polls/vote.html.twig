@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create poll - Polls{% endblock %}
+
+{% block body %}
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
+    <li class="breadcrumb-item active">{{ poll.title }}</li>
+</ul>
+<div class="mb-3 p-3 rounded bg-dark">
+    <h1>{{ poll.title }}</h1>
+</div>
+
+
+{% endblock %}
