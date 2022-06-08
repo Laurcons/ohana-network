@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 /**
  * @Route("/polls")
@@ -41,29 +42,16 @@ class PollsController extends AbstractController
         ManagerRegistry $doctrine
     ): Response
     {
-        $poll = new Poll();
-        $poll->setAuthor($this->getUser());
-        $poll->setAnswers([
-            "Helo",
-            "Hi"
-        ]);
-        
-        $form = $this->createFormBuilder($poll)
-            ->add('title', TextType::class, ['help' => "What are you polling? Summarize the question in a single sentence."])
-            ->add('description', TextareaType::class, ['help' => "Additional (optional) explanations go here."])
-            ->add('answers', CollectionType::class, [
-                'entry_type' => TextType::class,
-                'allow_add' => true
-            ])
+        $formData = [];
+        $form = $this->createFormBuilder($formData)
+            ->add('dataJson', HiddenType::class)
             ->add('submit', SubmitType::class, ['label' => "Create poll"])
             ->getForm();
         
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $doctrine->getManager();
-            $manager->persist($poll);
-            $manager->flush();
-            
+            $formData = $form->getData();
+            $this->addFlash("notice", "pushed data " . json_encode($formData));
             return $this->redirectToRoute('polls');
         }
 

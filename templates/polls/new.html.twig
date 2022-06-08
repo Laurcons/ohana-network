@@ -9,64 +9,12 @@
 
 {{ form_start(form) }}
     {{ form_row(form._token) }}
-
-    <h2>Information</h2>
-    {{ form_row(form.title) }}
-    {{ form_row(form.description) }}
-    <h2>Answers</h2>
-    <div id="formAnswers" class="mb-3">
-        <div class="js-elem-marker">
-        </div>
-        <button type="button" class="btn btn-primary me-2" id="addAnswerBtn">
-            Add answer
-        </button>
-        <button type="button" class="btn btn-outline-danger" id="removeAnswerBtn">
-            Remove last
-        </button>
+    {{ form_row(form.dataJson) }}
+    
+    <div class="js-poll-control">
+        <div class="spinner-border mb-3"></div>
     </div>
-
-    <template id="answerProto">
-        <div class="input-group mb-3">
-            <span class="input-group-text">#__index__</span>
-            <input type="text" id="form_answers___id__" name="form[answers][__id__]" required="required" class="form-control">
-        </div>
-    </template>
-
-    {{ form_row(form.submit) }}
 
 {{ form_end(form, { render_rest: false }) }}
 
-{% endblock %}
-
-{% block javascripts %}
-<script>
-    $(document).ready(function() {
-
-        let answerCounter = 0;
-
-        $("#addAnswerBtn").click(function() {
-            
-            let proto = $("#answerProto").html();
-            proto = proto.replace(/__id__/g, answerCounter);
-            proto = proto.replace(/__index__/g, answerCounter + 1);
-
-            $(".js-elem-marker").before(proto);
-
-            answerCounter++;
-
-        });
-
-        $("#removeAnswerBtn").click(function() {
-
-            if (answerCounter == 0)
-                return;
-
-            answerCounter--;
-
-            $("#form_answers_" + answerCounter).parent().remove();
-
-        });
-
-    });
-</script>
 {% endblock %}
