@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Poll;
 use App\Entity\PollResponse;
+use App\Form\Type\PollDeleteType;
 use App\Repository\PollRepository;
 use App\Repository\PollResponseRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -98,13 +99,13 @@ class PollsController extends AbstractController
                 "answers" => $poll->getAnswers()
             ])
         ];
-        $form = $this->createFormBuilder($formData)
+        $editForm = $this->createFormBuilder($formData)
             ->add('dataJson', HiddenType::class)
             ->add('submit', SubmitType::class, ['label' => "Edit poll"])
             ->getForm();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
+        $editForm->handleRequest($request);
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $formData = $editForm->getData();
             // TODO: Urgent JSON validation is needed here!
             $data = json_decode($formData["dataJson"], true);
             $poll
@@ -120,9 +121,20 @@ class PollsController extends AbstractController
             $this->addFlash("notice", "Poll successfully updated.");
             return $this->redirectToRoute('polls_vote', [ "id" => $id ]);
         }
+
+        $deleteForm = $this->createForm(PollDeleteType::class);
+        $deleteForm->handleRequest($request);
+        if ($deleteForm->isSubmitted() && $deleteForm->isValid()) {
+            $manager = $doctrine->getManager();
+            $manager->remove($poll);
+            $manager->flush();
+            $this->addFlash("notice", "Poll deleted successfully.");
+            return $this->redirectToRoute("polls");
+        }
         
         return $this->renderForm('polls/edit.html.twig', [
-            "form" => $form,
+            "editForm" => $editForm,
+            "deleteForm" => $deleteForm,
             "poll" => $poll
         ]);
     }
