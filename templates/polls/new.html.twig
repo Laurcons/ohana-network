@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create poll - Polls{% endblock %}
+
+{% block body %}
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
+    <li class="breadcrumb-item active">Create new poll</li>
+</ul>
+<div class="mb-3 p-3 rounded bg-dark">
+    <h1>Create poll</h1>
+</div>
+
+{{ form_start(form) }}
+    {{ form_row(form._token) }}
+    {{ form_row(form.dataJson) }}
+    
+    <div class="js-poll-control">
+        <div class="spinner-border mb-3"></div>
+    </div>
+
+{{ form_end(form, { render_rest: false }) }}
+
+{% endblock %}

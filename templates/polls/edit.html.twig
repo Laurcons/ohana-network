@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Edit poll - Polls{% endblock %}
+
+{% block body %}
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
+    <li class="breadcrumb-item">{{ poll.title }}</li>
+    <li class="breadcrumb-item active">Edit</li>
+</ul>
+<div class="mb-3 p-3 rounded bg-dark">
+    <button class="btn btn-sm btn-outline-danger float-end" data-bs-toggle="collapse" data-bs-target="#delete-collapse">Delete vote...</button>
+    <h1>Edit poll</h1>
+    <div class="collapse" id="delete-collapse">
+        <div class="border border-danger p-3 rounded">
+            Deleting this poll will remove <em>all</em> votes, and is not reversible.<br>
+            {{ form(deleteForm) }}
+        </div>
+    </div>
+</div>
+
+{{ form_start(editForm) }}
+    {{ form_row(editForm._token) }}
+    {{ form_row(editForm.dataJson) }}
+    
+    <div class="js-poll-control" data-edit-mode="true">
+        <div class="spinner-border mb-3"></div>
+    </div>
+
+{{ form_end(editForm, { render_rest: false }) }}
+
+{% endblock %}
