@@ -3,11 +3,15 @@ import { useState, useEffect } from "react";
 
 const dataElem = document.getElementById("form_dataJson"); // from symfony
 
+const AT_SINGLE_SELECT = "single_select";
+const AT_MULTI_SELECT = "multi_select";
+
 function PollFormControl(props) {
 
     let [ dataTree, setDataTree ] = useState({
         title: "",
         description: "",
+        answersType: AT_SINGLE_SELECT,
         answers: []
     });
     function updateDataJson(updater) {
@@ -66,11 +70,39 @@ function PollFormControl(props) {
               })
             }
           />
-          <small className="text-muted">
-            Describe the question in a bit more words, maybe.
-          </small>
+          <small className="text-muted">Describe the question in a bit more words, maybe.</small>
         </div>
         <h2>Answers</h2>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            id="single-select-radio"
+            type="radio"
+            checked={dataTree.answersType == AT_SINGLE_SELECT}
+            onClick={() =>
+              updateDataJson(t => {
+                t.answersType = AT_SINGLE_SELECT;
+                return t;
+              })
+            }
+          />
+          <label className="form-check-label" for="single-select-radio">Only one answer per person (single select)</label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            id="multi-select-radio"
+            checked={dataTree.answersType == AT_MULTI_SELECT}
+            onClick={() =>
+              updateDataJson(t => {
+                t.answersType = AT_MULTI_SELECT;
+                return t;
+              })
+            }
+          />
+          <label className="form-check-label" for="multi-select-radio">Multiple answers per person (multi select)</label>
+        </div>
         <button
           type="button"
           className="btn btn-outline-primary mb-3"
@@ -121,7 +153,9 @@ function PollFormControl(props) {
             name="form[submit]"
             className="btn btn-primary"
             onClick={ev => handleSubmit() || ev.preventDefault()}
-          >Create poll</button>
+          >
+            Create poll
+          </button>
         </div>
       </>
     );

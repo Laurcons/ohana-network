@@ -45,6 +45,11 @@ class Poll
      */
     private $pollResponses;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $options = [];
+
     public function __construct()
     {
         $this->pollResponses = new ArrayCollection();
@@ -129,6 +134,18 @@ class Poll
                 $pollResponse->setPoll(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(array $options): self
+    {
+        $this->options = $options;
 
         return $this;
     }
