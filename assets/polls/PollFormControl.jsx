@@ -3,8 +3,13 @@ import { useState, useEffect } from "react";
 
 const dataElem = document.getElementById("form_dataJson"); // from symfony
 
+// answers type
 const AT_SINGLE_SELECT = "single_select";
 const AT_MULTI_SELECT = "multi_select";
+// results display mode
+const RES_ALWAYS = "always";
+const RES_AFTER = "after";
+const RES_NEVER = "never";
 
 function PollFormControl(props) {
 
@@ -12,6 +17,7 @@ function PollFormControl(props) {
         title: "",
         description: "",
         answersType: AT_SINGLE_SELECT,
+        resultsMode: RES_ALWAYS,
         answers: []
     });
     function updateDataJson(updater) {
@@ -39,6 +45,8 @@ function PollFormControl(props) {
     useEffect(() => {
       if (props.editMode)
         setDataTree(JSON.parse(dataElem.value));
+      else
+        updateDataJson(t => t);
     }, []);
 
     return (
@@ -76,40 +84,6 @@ function PollFormControl(props) {
           <small className="text-muted">Describe the question in a bit more words, maybe.</small>
         </div>
         <h2>Answers</h2>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            id="single-select-radio"
-            type="radio"
-            checked={dataTree.answersType == AT_SINGLE_SELECT}
-            onChange={() =>
-              updateDataJson(t => {
-                t.answersType = AT_SINGLE_SELECT;
-                return t;
-              })
-            }
-          />
-          <label className="form-check-label" htmlFor="single-select-radio">
-            Only one answer per person (single select)
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            id="multi-select-radio"
-            checked={dataTree.answersType == AT_MULTI_SELECT}
-            onChange={() =>
-              updateDataJson(t => {
-                t.answersType = AT_MULTI_SELECT;
-                return t;
-              })
-            }
-          />
-          <label className="form-check-label" htmlFor="multi-select-radio">
-            Multiple answers per person (multi select)
-          </label>
-        </div>
         <button
           type="button"
           className="btn btn-outline-primary mb-3"
@@ -154,6 +128,99 @@ function PollFormControl(props) {
             </button>
           </div>
         ))}
+        <h2>Options</h2>
+        <div className="mb-3">
+          <label>Answers type</label>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              id="single-select-radio"
+              type="radio"
+              checked={dataTree.answersType == AT_SINGLE_SELECT}
+              onChange={() =>
+                updateDataJson(t => {
+                  t.answersType = AT_SINGLE_SELECT;
+                  return t;
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="single-select-radio">
+              Only one answer per person (single select)
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="radio"
+              id="multi-select-radio"
+              checked={dataTree.answersType == AT_MULTI_SELECT}
+              onChange={() =>
+                updateDataJson(t => {
+                  t.answersType = AT_MULTI_SELECT;
+                  return t;
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="multi-select-radio">
+              Multiple answers per person (multi select)
+            </label>
+          </div>
+        </div>
+        <div className="mb-3">
+          <label>Results mode</label>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              id="results-always-radio"
+              type="radio"
+              checked={dataTree.resultsMode == RES_ALWAYS}
+              onChange={() =>
+                updateDataJson(t => {
+                  t.resultsMode = RES_ALWAYS;
+                  return t;
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="results-always-radio">
+              Always display
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="radio"
+              id="results-after-radio"
+              checked={dataTree.resultsMode == RES_AFTER}
+              onChange={() =>
+                updateDataJson(t => {
+                  t.resultsMode = RES_AFTER;
+                  return t;
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="results-after-radio">
+              Display only after person voted
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="radio"
+              id="results-never-radio"
+              checked={dataTree.resultsMode == RES_NEVER}
+              onChange={() =>
+                updateDataJson(t => {
+                  t.resultsMode = RES_NEVER;
+                  return t;
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="results-never-radio">
+              Never display
+            </label>
+          </div>
+          <small className="text-muted">You will always be able to see the results.</small>
+        </div>
         <div className="mb-3">
           <button
             type="submit"
@@ -161,7 +228,7 @@ function PollFormControl(props) {
             className="btn btn-primary"
             onClick={ev => handleSubmit() || ev.preventDefault()}
           >
-            { props.editMode ? "Edit poll" : "Create poll" }
+            {props.editMode ? "Edit poll" : "Create poll"}
           </button>
         </div>
       </>

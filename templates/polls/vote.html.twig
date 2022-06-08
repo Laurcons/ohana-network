@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create poll - Polls{% endblock %}
+{% block title %}{{ poll.title }} - Polls{% endblock %}
 
 {% block body %}
 <ul class="breadcrumb">
@@ -25,21 +25,27 @@
 
 {{ form(form) }}
 
-<h3>Results</h3>
-<ol>
-{% for index, answer in poll.answers %}
-    <li>
-        <b>{{ answer.text }}</b><br>
-        Voted by 
-        {% for response in allResponses | filter(r => index in r.responses) %}
-            {# do it in as few lines as possible to avoid spaces in the output HTML #}
-            {# make output like: "User1, User2 and User3." #}
-            {{ response.user.nickname }}{% if not loop.last %}{% if loop.index0 == loop.length - 2 %} and {% else %}, {% endif %}{% else %}.{% endif %}
-        {% else %}
-            no one.
-        {% endfor %}
-    </li>
-{% endfor %}
-</ol>
+{% if 
+    poll.author == app.user or
+    poll.options.resultsMode == "always" or
+    (poll.options.resultsMode == "after" and hasOwnResponse)
+%}
+    <h3>Results</h3>
+    <ol>
+    {% for index, answer in poll.answers %}
+        <li>
+            <b>{{ answer.text }}</b><br>
+            Voted by 
+            {% for response in allResponses | filter(r => index in r.responses) %}
+                {# do it in as few lines as possible to avoid spaces in the output HTML #}
+                {# make output like: "User1, User2 and User3." #}
+                {{ response.user.nickname }}{% if not loop.last %}{% if loop.index0 == loop.length - 2 %} and {% else %}, {% endif %}{% else %}.{% endif %}
+            {% else %}
+                no one.
+            {% endfor %}
+        </li>
+    {% endfor %}
+    </ol>
+{% endif %}
 
 {% endblock %}

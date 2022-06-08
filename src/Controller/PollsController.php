@@ -60,7 +60,8 @@ class PollsController extends AbstractController
                 ->setAnswers($data["answers"])
                 ->setAuthor($this->getUser())
                 ->setOptions([
-                    "answersType" => $data["answersType"]
+                    "answersType" => $data["answersType"],
+                    "resultsMode" => $data["resultsMode"],
                 ]);
             $manager = $doctrine->getManager();
             $manager->persist($poll);
@@ -93,6 +94,7 @@ class PollsController extends AbstractController
                 "title" => $poll->getTitle(),
                 "description" => $poll->getDescription(),
                 "answersType" => $poll->getOptions()["answersType"],
+                "resultsMode" => $poll->getOptions()["resultsMode"],
                 "answers" => $poll->getAnswers()
             ])
         ];
@@ -110,7 +112,8 @@ class PollsController extends AbstractController
                 ->setDescription($data["description"])
                 ->setAnswers($data["answers"])
                 ->setOptions([
-                    "answersType" => $data["answersType"]
+                    "answersType" => $data["answersType"],
+                    "resultsMode" => $data["resultsMode"],
                 ]);
             $manager = $doctrine->getManager();
             $manager->flush();
