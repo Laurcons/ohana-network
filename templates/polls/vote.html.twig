@@ -7,9 +7,39 @@
     <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
     <li class="breadcrumb-item active">{{ poll.title }}</li>
 </ul>
-<div class="mb-3 p-3 rounded bg-dark">
+<div class="mb-3 p-3 rounded bg-dark clearfix">
     <h1>{{ poll.title }}</h1>
+    {% if poll.author == app.user %}
+        <div class="float-end">
+            <a class="btn btn-sm btn-outline-primary" href="{{ path('polls_edit', { id: poll.id }) }}">Edit</a>
+        </div>
+    {% endif %}
+    Vote by {{ poll.author.nickname }}
 </div>
 
+{% if hasOwnResponse %}
+<div class="alert alert-warning">
+    You already responded in this poll.
+</div>
+{% endif %}
+
+{{ form(form) }}
+
+<h3>Results</h3>
+<ol>
+{% for index, answer in poll.answers %}
+    <li>
+        <b>{{ answer.text }}</b><br>
+        Voted by 
+        {% for response in allResponses | filter(r => index in r.responses) %}
+            {# do it in as few lines as possible to avoid spaces in the output HTML #}
+            {# make output like: "User1, User2 and User3." #}
+            {{ response.user.nickname }}{% if not loop.last %}{% if loop.index0 == loop.length - 2 %} and {% else %}, {% endif %}{% else %}.{% endif %}
+        {% else %}
+            no one.
+        {% endfor %}
+    </li>
+{% endfor %}
+</ol>
 
 {% endblock %}
