@@ -5,7 +5,7 @@
 {% block body %}
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
-    <li class="breadcrumb-item">{{ poll.title }}</li>
+    <li class="breadcrumb-item"><a href="{{ path('polls_vote', {id: poll.id}) }}">{{ poll.title }}</a></li>
     <li class="breadcrumb-item active">Edit</li>
 </ul>
 <div class="mb-3 p-3 rounded bg-dark">

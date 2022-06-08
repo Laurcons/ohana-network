@@ -168,6 +168,7 @@ class PollsController extends AbstractController
             "expanded" => true,
             "disabled" => $pollResponse !== null,
             "label" => $poll->getTitle(),
+            "help" => $poll->getDescription(),
             "multiple" => $poll->getOptions()["answersType"] === "multi_select",
             "choices" => array_flip(array_map(
                 function($a) { return $a["text"]; },
