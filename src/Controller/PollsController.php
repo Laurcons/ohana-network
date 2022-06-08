@@ -3,16 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Poll;
+use App\Entity\PollResponse;
 use App\Repository\PollRepository;
+use App\Repository\PollResponseRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 /**
@@ -130,13 +130,64 @@ class PollsController extends AbstractController
     public function vote(
         int $id,
         Request $request,
-        PollRepository $pollRepo
+        PollRepository $pollRepo,
+        PollResponseRepository $pollResponseRepo,
+        ManagerRegistry $doctrine
     ) {
         $poll = $pollRepo->find($id);
         if ($poll === null)
             throw $this->createNotFoundException("Poll not found.");
-        return $this->render('polls/vote.html.twig', [
+        $pollResponse = $pollResponseRepo->findOneBy([
+            "poll" => $poll,
+            "user" => $this->getUser()
+        ]);
+        $allResponses = $pollResponseRepo->findBy([
             "poll" => $poll
+        ]);
+
+        $formData = $pollResponse !== null ? [
+            "answer" => $pollResponse->getResponses()
+        ] : [];
+        $form = $this->createFormBuilder($formData);
+        $form->add("answer", ChoiceType::class, [
+            "expanded" => true,
+            "disabled" => $pollResponse !== null,
+            "label" => $poll->getTitle(),
+            "multiple" => $poll->getOptions()["answersType"] === "multi_select",
+            "choices" => array_flip(array_map(
+                function($a) { return $a["text"]; },
+                $poll->getAnswers()
+            ))
+        ]);
+        if ($pollResponse === null)
+            $form->add("submit", SubmitType::class, [ "label" => "Cast vote" ]);
+        $form = $form->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($pollResponse !== null)
+                throw $this->createAccessDeniedException("Cannot vote twice.");
+            $formData = $form->getData();
+            $pollResponse = new PollResponse();
+            $pollResponse
+                ->setPoll($poll)
+                ->setUser($this->getUser())
+                ->setResponses(
+                    $poll->getOptions()["answersType"] === "multi_select" ?
+                    $formData["answer"] :
+                        [$formData["answer"]]
+                );
+            $manager = $doctrine->getManager();
+            $manager->persist($pollResponse);
+            $manager->flush();
+            // reload page
+            return $this->redirectToRoute('polls_vote', [ "id" => $id ]);
+        }
+
+        return $this->renderForm('polls/vote.html.twig', [
+            "poll" => $poll,
+            "hasOwnResponse" => $pollResponse !== null,
+            "allResponses" => $allResponses,
+            "form" => $form
         ]);
     }
 }
