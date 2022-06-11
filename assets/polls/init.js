@@ -8,8 +8,11 @@ function main() {
     if (domelem === null)
         return;
     let editMode = domelem.getAttribute("data-edit-mode") == "true";
+    let answersLocked = editMode ?
+        domelem.getAttribute("data-answers-locked") == "true" :
+        undefined;
     let root = createRoot(domelem);
-    root.render(<PollFormControl maxAnswers={50} editMode={editMode} />);
+    root.render(<PollFormControl {...{maxAnswers: 50, editMode, answersLocked}} />);
 }
 
 main();

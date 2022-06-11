@@ -26,6 +26,7 @@
         {#{% endif %}#}
         <a href="{{ path('polls_vote', { id: poll.id }) }}" class="btn btn-primary float-end">
             Vote
+            {{ poll.author == app.user ? "or edit" : ""}}
         </a>
     </div>
 </div>

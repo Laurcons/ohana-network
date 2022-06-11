@@ -111,11 +111,14 @@ class PollsController extends AbstractController
             $poll
                 ->setTitle($data["title"])
                 ->setDescription($data["description"])
-                ->setAnswers($data["answers"])
+                //->setAnswers($data["answers"])
                 ->setOptions([
                     "answersType" => $data["answersType"],
                     "resultsMode" => $data["resultsMode"],
                 ]);
+            // disallow answer changing if there are respondents
+            if (count($poll->getPollResponses()) === 0)
+                $poll->setAnswers($data["answers"]);
             $manager = $doctrine->getManager();
             $manager->flush();
             $this->addFlash("notice", "Poll successfully updated.");

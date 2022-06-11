@@ -84,22 +84,27 @@ function PollFormControl(props) {
           <small className="text-muted">Describe the question in a bit more words, maybe.</small>
         </div>
         <h2>Answers</h2>
-        <button
-          type="button"
-          className="btn btn-outline-primary mb-3"
-          onClick={ev =>
-            updateDataJson(t => {
-              if (t.answers.length >= props.maxAnswers) {
-                alert("Woah. Slow down there with the answers!");
+        { props.answersLocked && <>
+          <small className="text-muted">There are people who already answered this poll, therefore you cannot alter the answers.</small>
+        </>}
+        { !props.answersLocked &&
+          <button
+            type="button"
+            className="btn btn-outline-primary mb-3"
+            onClick={ev =>
+              updateDataJson(t => {
+                if (t.answers.length >= props.maxAnswers) {
+                  alert("Woah. Slow down there with the answers!");
+                  return t;
+                }
+                t.answers.push({ text: "" });
                 return t;
-              }
-              t.answers.push({ text: "" });
-              return t;
-            })
-          }
-        >
-          Add answer
-        </button>
+              })
+            }
+          >
+            Add answer
+          </button>
+        }
         {dataTree.answers.map((answer, idx) => (
           <div className="input-group mb-3">
             <span className="input-group-text">{idx + 1}</span>
@@ -113,19 +118,22 @@ function PollFormControl(props) {
                   return t;
                 })
               }
+              disabled={props.answersLocked}
             ></input>
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={ev =>
-                updateDataJson(t => {
-                  t.answers.splice(idx, 1);
-                  return t;
-                })
-              }
-            >
-              &times;
-            </button>
+            { !props.answersLocked &&
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={ev =>
+                  updateDataJson(t => {
+                    t.answers.splice(idx, 1);
+                    return t;
+                  })
+                }
+              >
+                &times;
+              </button>
+            }
           </div>
         ))}
         <h2>Options</h2>
