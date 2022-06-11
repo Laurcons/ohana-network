@@ -1,0 +1,39 @@
+{
+    "title": "Poll Json schema",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "answersType": {
+            "type": "string",
+            "enum": [ "single_select", "multi_select" ]
+        },
+        "resultsMode": {
+            "type": "string",
+            "enum": [ "always", "never", "after" ]
+        },
+        "answers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string"
+                    }
+                },
+                "required": ["text"]
+            }
+        }
+    },
+    "required": [
+        "title",
+        "description",
+        "answersType",
+        "resultsMode",
+        "answers"
+    ]
+}

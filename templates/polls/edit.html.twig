@@ -26,6 +26,7 @@
 {{ form_start(editForm) }}
     {{ form_row(editForm._token) }}
     {{ form_row(editForm.dataJson) }}
+    {{ form_errors(editForm) }}
     
     <div class="js-poll-control" data-edit-mode="true" data-answers-locked="{{ poll.pollResponses | length == 0 ? 'fuck no' : 'true' }}">
         <div class="spinner-border mb-3"></div>

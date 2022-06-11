@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Mrsuh\JsonValidationBundle\JsonValidator\JsonValidator;
 
 /**
  * @Route("/polls")
@@ -40,7 +41,8 @@ class PollsController extends AbstractController
      */
     public function new(
         Request $request,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        JsonValidator $validator
     ): Response
     {
         $formData = [];
@@ -52,7 +54,10 @@ class PollsController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            // TODO: Urgent JSON validation is needed here!
+            $validator->validate($formData["dataJson"], "Schema/PollSchema.json");
+            if (!empty($validator->getErrors())) {
+                throw $this->createAccessDeniedException("Invalid JSON supplied.");
+            }
             $data = json_decode($formData["dataJson"], true);
             $poll = new Poll();
             $poll
@@ -83,7 +88,8 @@ class PollsController extends AbstractController
         int $id,
         Request $request,
         ManagerRegistry $doctrine,
-        PollRepository $pollRepo
+        PollRepository $pollRepo,
+        JsonValidator $validator
     ) {
         $poll = $pollRepo->find($id);
         if ($poll === null) 
@@ -106,12 +112,14 @@ class PollsController extends AbstractController
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $formData = $editForm->getData();
-            // TODO: Urgent JSON validation is needed here!
+            $validator->validate($formData["dataJson"], "Schema/PollSchema.json");
+            if (!empty($validator->getErrors())) {
+                throw $this->createAccessDeniedException("Invalid JSON supplied.");
+            }
             $data = json_decode($formData["dataJson"], true);
             $poll
                 ->setTitle($data["title"])
                 ->setDescription($data["description"])
-                //->setAnswers($data["answers"])
                 ->setOptions([
                     "answersType" => $data["answersType"],
                     "resultsMode" => $data["resultsMode"],
