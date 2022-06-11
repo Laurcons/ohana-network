@@ -2,6 +2,10 @@
 
 {% block title %}Edit poll - Polls{% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('polls') }}
+{% endblock %}
+
 {% block body %}
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ path('polls') }}">Polls</a></li>
