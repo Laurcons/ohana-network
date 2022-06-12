@@ -148,6 +148,27 @@
             </div>
         </nav>
         <main class="container-fluid wide-adapt py-3">
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-info">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% if app.user is not null and
+                not app.request.attributes.get('_route') == 'activation' and
+                not app.user.hasValidPronouns %}
+                <div class="alert alert-info">
+                    The Network deals a bit differently with your pronouns now. You should go to your
+                    <a href="{{ path('preferences') }}">preferences</a> page to check out the options you
+                    have for your pronouns.
+                </div>
+            {% endif %}
+            {% if app.user is not null %}
+                {% for notif in notifications.userNotifications %}
+                    <div class="alert alert-info">
+                        {{ notif.contentMd | markdown_to_html | replace({'<p>' : '', '</p>': ''}) | raw }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% if breadcrumbs is defined %}
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -164,20 +185,6 @@
                         {% endfor %}
                     </ol>
                 </nav>
-            {% endif %}
-            {% for message in app.flashes('notice') %}
-                <div class="alert alert-info">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% if app.user is not null and
-                not app.request.attributes.get('_route') == 'activation' and
-                not app.user.hasValidPronouns %}
-                <div class="alert alert-info">
-                    The Network deals a bit differently with your pronouns now. You should go to your
-                    <a href="{{ path('preferences') }}">preferences</a> page to check out the options you
-                    have for your pronouns.
-                </div>
             {% endif %}
             {% block body %}{% endblock %}
         </main>

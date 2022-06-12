@@ -96,6 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->luluRankings = new ArrayCollection();
         $this->tellonyms = new ArrayCollection();
         $this->authoredPolls = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
     public const STATUS_NOT_ACTIVATED = "NOT_ACTIVATED";
     public const STATUS_ACTIVE = "ACTIVE";
