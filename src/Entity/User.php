@@ -63,10 +63,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Regex(
-     *      pattern="#^[a-z]+/[a-z]+/[a-z]+$#",
-     *      message="Your pronouns must be three words without spaces separated by slashes."
-     * )
      */
     private $pronouns;
 
@@ -254,19 +250,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return explode('/', $this->getPronouns());
     }
 
-    public function getPronounNominative(): ?string
+    public static function getValidPronouns(): array 
+    {
+        return [
+            "he/him/his/his",
+            "she/her/her/hers",
+            "they/them/their/theirs"
+        ];
+    }
+
+    public function getPronounCount(): int
+    {
+        return count($this->getPronounParts());
+    }
+
+    public function hasValidPronouns(): bool
+    {
+        return in_array($this->getPronouns(), User::getValidPronouns());
+    }
+
+    public function getPronounSubjective(): ?string
     {
         return $this->getPronounParts()[0];
     }
 
-    public function getPronounDative(): ?string
+    public function getPronounObjective(): ?string
     {
         return $this->getPronounParts()[1];
     }
 
-    public function getPronounGenitive(): ?string
+    public function getPronounPossesive(): ?string
     {
         return $this->getPronounParts()[2];
+    }
+
+    public function getPronounPossesiveIndependent(): ?string
+    {
+        $parts = $this->getPronounParts();
+        return $parts[count($parts) - 1]; // last one
+        // maybe the user hasn't updated yet to the new 1/2/3/4 pronoun format
     }
 
     public function getNickname(): ?string
