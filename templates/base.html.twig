@@ -170,6 +170,15 @@
                     {{ message }}
                 </div>
             {% endfor %}
+            {% if app.user is not null and
+                not app.request.attributes.get('_route') == 'activation' and
+                not app.user.hasValidPronouns %}
+                <div class="alert alert-info">
+                    The Network deals a bit differently with your pronouns now. You should go to your
+                    <a href="{{ path('preferences') }}">preferences</a> page to check out the options you
+                    have for your pronouns.
+                </div>
+            {% endif %}
             {% block body %}{% endblock %}
         </main>
     </body>
