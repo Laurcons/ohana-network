@@ -154,7 +154,7 @@
                 </div>
             {% endfor %}
             {% if app.user is not null and
-                not app.request.attributes.get('_route') == 'activation' and
+                app.request.attributes.get('_route') != 'activation' and
                 not app.user.hasValidPronouns %}
                 <div class="alert alert-info">
                     The Network deals a bit differently with your pronouns now. You should go to your

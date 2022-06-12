@@ -39,7 +39,7 @@ class ActivationFormType extends AbstractType {
             ->add('realName', TextType::class, ['help' => 'Please make sure that you start with your family name, then your preferred given name, then any other given names (if you want). Do not use dashes. Eg. Pricop Laurentiu Constantin'])
             ->add('nickname', TextType::class, ['help' => 'Set a nickname that will be used across the Network.'])
             ->add('pronouns', ChoiceType::class, [
-                'help' => 'Your pronouns will be used across the Network when referring to you. Neo-pronouns are not supported.',
+                'help' => 'Your pronouns will be used across the Network when referring to you. Neo-pronouns can be added on demand.',
                 'choices' => $pronounList
             ])
             ->add('submit', SubmitType::class, ['label' => "Finish registration"]);
