@@ -155,10 +155,11 @@
             {% endfor %}
             {% if app.user is not null and
                 app.request.attributes.get('_route') != 'activation' and
+                app.request.attributes.get('_route') != 'resetPassword' and
                 not app.user.hasValidPronouns %}
                 <div class="alert alert-info">
                     The Network deals a bit differently with your pronouns now. You should go to your
-                    <a href="{{ path('preferences') }}">preferences</a> page to check out the options you
+                    <a href="{{ path('preferences') }}">preferences page</a> to check out the options you
                     have for your pronouns.
                 </div>
             {% endif %}
