@@ -100,6 +100,13 @@
                                         <i class="bi-bar-chart-line me-1"></i>
                                         Polls
                                     </a>
+                                    <a href="{{ path('secretSanta') }}" class="dropdown-item">
+                                        <i class="bi-snow me-1"></i>
+                                        Secret Santa
+                                        <span class="badge bg-primary ms-1">
+                                            LIMITED TIME
+                                        </span>
+                                    </a>
                                 </div>
                             </li>
                             {% if is_granted('ROLE_ADMIN') %}

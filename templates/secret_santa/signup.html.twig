@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% set meta_description = "Let's play Secret Santa!" %}
+
+{% block title %}Secret Santa{% endblock %}
+
+{% block body %}
+<div class="bg-dark p-3 mb-3 rounded">
+    <h1>Secret Santa</h1>
+    <p>Let's end 2022 on a good note, with Ohana Secret Santa! ⛄</p>
+</div>
+
+{% if signedUp %}
+    <div class="alert alert-success">
+        You're participating in Secret Santa! 🎊
+    </div>
+    <h2>Your information</h2>
+{% else %}
+    <div class="alert alert-info">Submitting this form will register you for Ohana Secret Santa. If you prefer not to play, do not fill this out.</div>
+    <h2>Sign up!</h2>
+{% endif %}
+
+{{ form(signupForm) }}
+
+{% if isAdmin %}
+<h2>Administrative</h2>
+
+<form action="{{ path('secretSanta_randomize') }}" method="POST">
+    <button type="submit" class="btn btn-outline-danger">Start Ohana Secret Santa!</button>
+</form>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% set meta_description = "Let's play Secret Santa!" %}
+
+{% block title %}Secret Santa{% endblock %}
+
+{% block body %}
+<div class="bg-dark p-3 mb-3 rounded">
+    <h1>Secret Santa</h1>
+    <p>Let's end 2022 on a good note, with Ohana Secret Santa! ⛄</p>
+</div>
+
+<h2>Your match</h2>
+<div class="alert alert-success text-center">
+    You matched with<br>
+    <span class="fs-4">{{ otherSsAsn.sender.nickname }} 🌟</span>
+</div>
+<div class="card mb-3">
+    {% if otherSsAsn.message %}
+        <div class="card-header">
+            {{ otherSsAsn.sender.nickname }} left you a message:
+        </div>
+        <div class="card-body">
+            {{ otherSsAsn.message | nl2br }}
+        </div>
+    {% else %}
+        <div class="card-body">
+            {{ otherSsAsn.sender.nickname }} didn't have any gift preferences, so get {{ otherSsAsn.sender.pronounObjective }} something nice!
+        </div>
+    {% endif %}
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Gift status</div>
+    <div class="card-body">
+        <p>Do you wanna tell {{ otherSsAsn.sender.nickname }} how close {{ otherSsAsn.sender.pronounPossesive }} present is? Leave {{ otherSsAsn.sender.pronounObjective }} a message!</p>
+        {{ form(statusForm) }}
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Shipping information for {{ otherSsAsn.sender.nickname }}</div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ otherSsAsn.address | nl2br }}</li>
+        {% if otherSsAsn.observations %}
+        <li class="list-group-item">{{ otherSsAsn.observations | nl2br }}</li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Your Secret Santa said</div>
+    <div class="card-body">
+        {% if otherSsAsn.customStatus %}
+            {{ otherSsAsn.customStatus | nl2br }}
+        {% else %}
+            <em>Your Secret Santa hasn't said anything about your present yet.</em>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
